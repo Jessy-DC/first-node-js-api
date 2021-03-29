@@ -1,4 +1,5 @@
-const functions = require('../functions/functions')
+const {success, error, getIndex, createID} = require('../functions/functions')
+const {members} = require('../data/member')
 
 describe('test api calls', () => {
     test('should return success with object', () => {
@@ -13,7 +14,7 @@ describe('test api calls', () => {
             'result': 'Jessy'
         }
         promise.then(responseData => {
-            expect(functions.success(responseData)).toEqual(expected)
+            expect(success(responseData)).toEqual(expected)
         });
     })
 
@@ -29,7 +30,20 @@ describe('test api calls', () => {
             'message': 'Wrong max value !'
         }
         promise.then(responseData => {
-            expect(functions.success(responseData)).toEqual(expected)
+            expect(error(responseData)).toEqual(expected)
         });
+    })
+})
+
+describe('test functions for index and ID', () => {
+    test('should return index of given member', () => {
+        let idMember = 2;
+        expect(getIndex(idMember)).toBe(1)
+    })
+
+    test('should return last id of members with an increment of 1', () => {
+        let lastId = members[members.length - 1].id
+        let expectedResult = ++lastId
+        expect(createID()).toBe(expectedResult)
     })
 })
