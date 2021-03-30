@@ -25,3 +25,15 @@ exports.getIndex = function (id) {
 exports.createID = function() {
     return members[members.length - 1].id + 1
 }
+
+exports.isErr = (err) => {
+    return err instanceof Error;
+}
+
+exports.checkAndChange = (obj) => {
+    if (this.isErr(obj)) {
+        return this.error(obj.message)
+    } else {
+        return this.success(obj)
+    }
+}
