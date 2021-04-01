@@ -1,11 +1,11 @@
 const express = require('express');
-const app = express();
 const mysql = require('promise-mysql')
 const morgan = require('morgan')('dev')
-const {success, error, checkAndChange} = require('./functions/functions')
+const {checkAndChange} = require('./functions/functions')
 const bodyParser = require('body-parser')
-const {members} = require('./data/member')
 const config = require('./assets/config.json')
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./assets/swagger.json');
 
 mysql.createConnection({
     host: config.db.host,
@@ -15,12 +15,14 @@ mysql.createConnection({
 }).then((db) => {
     console.log('Connected.')
 
+    const app = express();
     let MembersRouter = express.Router();
     let Members = require('./assets/classes/members-class')(db, config)
 
     app.use(morgan)
     app.use(express.json())
     app.use(express.urlencoded({ extended: true }))
+    app.use(config.rootAPI + 'api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
 
     MembersRouter.route('/')
         //Get all members
