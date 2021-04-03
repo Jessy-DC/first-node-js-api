@@ -20,10 +20,9 @@ mysql.createConnection({
     let Members = require('./assets/classes/members-class')(db, config)
 
     app.use(morgan)
-    app.use(express.json())
-    app.use(express.urlencoded({ extended: true }))
+    app.use(bodyParser.json())
+    app.use(bodyParser.urlencoded({ extended: true }))
     app.use(config.rootAPI + 'api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
-
     MembersRouter.route('/')
         //Get all members
         .get(async(req, res) => {
